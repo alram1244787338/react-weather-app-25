@@ -1,9 +1,9 @@
 import React from 'react';
 import GithubIcon from '../../assets/github.svg?react';
-import { useAppContext } from '../../context/AppContext';
+import { useTheme } from '../../context/ThemeContext';
 
 const Header: React.FC = () => {
-  const { darkMode: isDarkMode, toggleDarkMode } = useAppContext();
+  const { darkMode: isDarkMode, toggleDarkMode } = useTheme();
 
   return (
     <header className="rw-header">

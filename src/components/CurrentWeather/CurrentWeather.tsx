@@ -4,7 +4,7 @@ import HumidityIcon from '../../assets/humidity-icon.svg?react';
 import LowIcon from '../../assets/low-icon.svg?react';
 import PressureIcon from '../../assets/pressure-icon.svg?react';
 import WindIcon from '../../assets/wind-icon.svg?react';
-import { useAppContext } from '../../context/AppContext';
+import { useWeather } from '../../context/WeatherContext';
 import { kmToMile, TempUnit } from '../../utils/unitConversion';
 import ToggleSwitch from '../ui/ToggleSwitch/ToggleSwitch';
 import WeatherIcon from './WeatherIcon';
@@ -17,7 +17,7 @@ const CurrentWeather: React.FC = () => {
     isInitial,
     tempUnit: degreeType,
     weatherData: weather,
-  } = useAppContext();
+  } = useWeather();
 
   useEffect(() => {
     if (isError) {

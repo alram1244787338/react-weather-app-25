@@ -1,15 +1,16 @@
-import React, { useEffect } from 'react';
-import { useAppContext } from './context/AppContext';
+import React from 'react';
+import { ThemeProvider } from './context/ThemeContext';
+import { WeatherProvider } from './context/WeatherContext';
 import Home from './pages/Home';
 
 const App: React.FC = () => {
-  const { darkMode } = useAppContext();
-
-  useEffect(() => {
-    document.body.dataset.theme = darkMode ? 'dark' : 'light';
-  }, [darkMode]);
-
-  return <Home />;
+  return (
+    <ThemeProvider>
+      <WeatherProvider>
+        <Home />
+      </WeatherProvider>
+    </ThemeProvider>
+  );
 };
 
 export default App;

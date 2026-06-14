@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { PlaceSuggestion } from '../../api/placeSuggestion';
-import { useAppContext } from '../../context/AppContext';
+import { useWeather } from '../../context/WeatherContext';
 
 interface ISuggestionProps {
   suggestion: PlaceSuggestion;
@@ -8,7 +8,7 @@ interface ISuggestionProps {
 }
 
 const Suggestion: React.FC<ISuggestionProps> = (props) => {
-  const { fetchWeather } = useAppContext();
+  const { fetchWeather } = useWeather();
 
   const onClick = () => {
     fetchWeather({ lat: props.suggestion.lat, lng: props.suggestion.lng });

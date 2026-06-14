@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAppContext } from '../../context/AppContext';
+import { useWeather } from '../../context/WeatherContext';
 import { celciusToFahrenheit, TempUnit } from '../../utils/unitConversion';
 
 interface ITemperatureProps {
@@ -7,7 +7,7 @@ interface ITemperatureProps {
 }
 
 const Temperature: React.FC<ITemperatureProps> = (props) => {
-  const { tempUnit: degreeType } = useAppContext();
+  const { tempUnit: degreeType } = useWeather();
 
   if (degreeType === TempUnit.FAHRENHEIT) {
     return <>{celciusToFahrenheit(props.value)}</>;

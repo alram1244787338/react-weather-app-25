@@ -5,10 +5,10 @@ import Header from '../components/Header/Header';
 import Search from '../components/Search/Search';
 import Spinner from '../components/ui/Spinner/Spinner';
 import CurrentWeather from '../components/CurrentWeather/CurrentWeather';
-import { useAppContext } from '../context/AppContext';
+import { useWeather } from '../context/WeatherContext';
 
 const Home = () => {
-  const { isLoading } = useAppContext();
+  const { isLoading } = useWeather();
 
   return (
     <>
