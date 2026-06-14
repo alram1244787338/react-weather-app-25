@@ -4,11 +4,11 @@ import HumidityIcon from '../../assets/humidity-icon.svg?react';
 import LowIcon from '../../assets/low-icon.svg?react';
 import PressureIcon from '../../assets/pressure-icon.svg?react';
 import WindIcon from '../../assets/wind-icon.svg?react';
-import { useAppContext } from '../../context/AppContext';
+import { useWeather } from '../../context/WeatherContext';
 import { kmToMile, TempUnit } from '../../utils/unitConversion';
 import ToggleSwitch from '../ui/ToggleSwitch/ToggleSwitch';
-import WeatherIcon from './WeatherIcon';
-import Temperature from './Temperature';
+import WeatherIcon from '../shared/WeatherIcon';
+import Temperature from '../shared/Temperature';
 
 const CurrentWeather: React.FC = () => {
   const {
@@ -17,7 +17,7 @@ const CurrentWeather: React.FC = () => {
     isInitial,
     tempUnit: degreeType,
     weatherData: weather,
-  } = useAppContext();
+  } = useWeather();
 
   useEffect(() => {
     if (isError) {
@@ -32,7 +32,7 @@ const CurrentWeather: React.FC = () => {
       <div className="rw-weather-header">
         <h6 className="rw-section-title">Current Weather</h6>
         <div>
-          <ToggleSwitch onClick={changeTempUnit} />
+          <ToggleSwitch onClick={changeTempUnit} isToggled={degreeType === TempUnit.FAHRENHEIT} />
         </div>
       </div>
       <div className="rw-current-weather-inner">

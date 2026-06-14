@@ -1,3 +1,7 @@
+import type { PlaceSuggestion } from './types';
+
+export type { PlaceSuggestion };
+
 type OpenMeteoGeocodingResult = {
   id: number;
   name: string;
@@ -10,13 +14,6 @@ type OpenMeteoGeocodingResult = {
 
 type OpenMeteoGeocodingResponse = {
   results?: OpenMeteoGeocodingResult[];
-};
-
-export type PlaceSuggestion = {
-  id: number;
-  label: string;
-  lat: number;
-  lng: number;
 };
 
 const buildLabel = (place: OpenMeteoGeocodingResult) => {

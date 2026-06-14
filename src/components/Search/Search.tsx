@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useAppContext } from '../../context/AppContext';
-import { fetchCities, PlaceSuggestion } from './../../api/placeSuggestion';
-import { useClickOutside } from './../../hooks/useClickOutside';
+import { useWeather } from '../../context/WeatherContext';
+import { fetchCities } from '../../api/placeSuggestion';
+import type { PlaceSuggestion } from '../../api/types';
+import { useClickOutside } from '../../hooks/useClickOutside';
 import LocationIcon from '../../assets/location-icon.svg?react';
 import SearchIcon from '../../assets/search-icon.svg?react';
 import Suggestion from './Suggestion';
 
 const Search: React.FC = () => {
-  const { fetchWeather } = useAppContext();
+  const { fetchWeather } = useWeather();
   const suggestionRef = useRef<HTMLDivElement>(null);
   const [suggestions, setSuggestions] = useState<PlaceSuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);

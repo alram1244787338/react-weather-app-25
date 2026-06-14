@@ -36,3 +36,12 @@ export type ExtendedForecastData = {
     main: string;
   };
 }
+
+export type PlaceSuggestion = {
+  id: number;
+  label: string;
+  lat: number;
+  lng: number;
+}
+
+export type WeatherQuery = string | { lat: number; lng: number };
