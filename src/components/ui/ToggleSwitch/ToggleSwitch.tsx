@@ -1,24 +1,23 @@
 import React from 'react';
 
-interface IToggleSwitchProps {
-  onClick: () => void;
+interface ToggleSwitchProps {
+  isToggled: boolean;
+  onToggle: () => void;
 }
 
-const ToggleSwitch: React.FC<IToggleSwitchProps> = (props) => {
-  const [toggled, setToggled] = React.useState(false);
-
+const ToggleSwitch: React.FC<ToggleSwitchProps> = ({ isToggled, onToggle }) => {
   return (
     <button
       className="rw-temp-switch"
       type="button"
-      onClick={() => {
-        setToggled((checked) => !checked);
-        props.onClick();
-      }}
+      onClick={onToggle}
     >
-      {toggled && <span className="on">C</span>}
-      {!toggled && <span className="off">F</span>}
-      <span className="rw-temp-slider" style={{ transform: toggled ? ' translateX(28px)' : ' translateX(0px)' }} />
+      {isToggled && <span className="on">C</span>}
+      {!isToggled && <span className="off">F</span>}
+      <span
+        className="rw-temp-slider"
+        style={{ transform: isToggled ? ' translateX(28px)' : ' translateX(0px)' }}
+      />
     </button>
   );
 };

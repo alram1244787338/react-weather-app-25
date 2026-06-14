@@ -1,38 +1,36 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import HighIcon from '../../assets/high-icon.svg?react';
 import HumidityIcon from '../../assets/humidity-icon.svg?react';
 import LowIcon from '../../assets/low-icon.svg?react';
 import PressureIcon from '../../assets/pressure-icon.svg?react';
 import WindIcon from '../../assets/wind-icon.svg?react';
-import { useAppContext } from '../../context/AppContext';
-import { kmToMile, TempUnit } from '../../utils/unitConversion';
+import { TempUnit } from '../../utils/unitConversion';
+import { WeatherData } from '../../api/types';
+import { formatWindSpeed, getWindUnitLabel } from '../../utils/weatherFormatters';
+import TemperatureDisplay from '../common/TemperatureDisplay';
+import WeatherIcon from '../common/WeatherIcon';
 import ToggleSwitch from '../ui/ToggleSwitch/ToggleSwitch';
-import WeatherIcon from './WeatherIcon';
-import Temperature from './Temperature';
 
-const CurrentWeather: React.FC = () => {
-  const {
-    changeTempUnit,
-    isError,
-    isInitial,
-    tempUnit: degreeType,
-    weatherData: weather,
-  } = useAppContext();
+interface CurrentWeatherDisplayProps {
+  weather: WeatherData;
+  tempUnit: TempUnit;
+  onChangeTempUnit: () => void;
+}
 
-  useEffect(() => {
-    if (isError) {
-      console.log('Cannot load weather for this place');
-    }
-  }, [isError]);
-
-  if (isInitial) return <></>;
-
+const CurrentWeatherDisplay: React.FC<CurrentWeatherDisplayProps> = ({
+  weather,
+  tempUnit,
+  onChangeTempUnit,
+}) => {
   return (
     <div className="rw-weather">
       <div className="rw-weather-header">
         <h6 className="rw-section-title">Current Weather</h6>
         <div>
-          <ToggleSwitch onClick={changeTempUnit} />
+          <ToggleSwitch
+            isToggled={tempUnit === TempUnit.FAHRENHEIT}
+            onToggle={onChangeTempUnit}
+          />
         </div>
       </div>
       <div className="rw-current-weather-inner">
@@ -41,8 +39,7 @@ const CurrentWeather: React.FC = () => {
           <div className="rw-current-temp">
             <WeatherIcon code={weather.weather.id} big />
             <span>
-              <Temperature value={weather.main.temp} />
-              <sup>&deg;</sup>
+              <TemperatureDisplay value={weather.main.temp} unit={tempUnit} />
             </span>
           </div>
           <h6>{weather.weather.description}</h6>
@@ -50,19 +47,16 @@ const CurrentWeather: React.FC = () => {
 
         <div className="rw-current-info">
           <p className="rw-feels-like">
-            Feels like <Temperature value={weather.main.feels_like} />
-            <sup>&deg;</sup>
+            Feels like <TemperatureDisplay value={weather.main.feels_like} unit={tempUnit} />
           </p>
           <div className="rw-high-low">
             <div className="rw-weather-degree">
               <HighIcon />
-              <Temperature value={weather.main.temp_max} />
-              <sup>&deg;</sup>
+              <TemperatureDisplay value={weather.main.temp_max} unit={tempUnit} />
             </div>
             <div className="rw-weather-degree">
               <LowIcon />
-              <Temperature value={weather.main.temp_min} />
-              <sup>&deg;</sup>
+              <TemperatureDisplay value={weather.main.temp_min} unit={tempUnit} />
             </div>
           </div>
           <div className="rw-info-row">
@@ -76,8 +70,8 @@ const CurrentWeather: React.FC = () => {
               <WindIcon /> Wind
             </div>
             <span>
-              {degreeType === TempUnit.CELCIUS ? weather.wind.speed : kmToMile(weather.wind.speed)}
-              {degreeType === TempUnit.CELCIUS ? 'kph' : 'mph'}
+              {formatWindSpeed(weather.wind.speed, tempUnit)}
+              {getWindUnitLabel(tempUnit)}
             </span>
           </div>
           <div className="rw-info-row">
@@ -92,4 +86,4 @@ const CurrentWeather: React.FC = () => {
   );
 };
 
-export default CurrentWeather;
+export default CurrentWeatherDisplay;

@@ -1,22 +1,31 @@
 import React from 'react';
+import CurrentWeatherDisplay from '../components/CurrentWeather/CurrentWeatherDisplay';
 import Footer from '../components/Footer/Footer';
-import Forecast from '../components/Forecast/Forecast';
+import ForecastDisplay from '../components/Forecast/ForecastDisplay';
 import Header from '../components/Header/Header';
-import Search from '../components/Search/Search';
+import SearchPanel from '../components/Search/SearchPanel';
 import Spinner from '../components/ui/Spinner/Spinner';
-import CurrentWeather from '../components/CurrentWeather/CurrentWeather';
-import { useAppContext } from '../context/AppContext';
+import { useSearchSuggestions } from '../hooks/useSearchSuggestions';
+import { useWeatherData } from '../hooks/useWeatherData';
 
 const Home = () => {
-  const { isLoading } = useAppContext();
+  const { weatherData, forecastData, tempUnit, isLoading, isInitial, fetchWeather, changeTempUnit } =
+    useWeatherData();
+  const search = useSearchSuggestions();
 
   return (
     <>
       {isLoading && <Spinner />}
       <Header />
-      <Search />
-      <CurrentWeather />
-      <Forecast />
+      <SearchPanel search={search} onQuery={fetchWeather} />
+      {!isInitial && (
+        <CurrentWeatherDisplay
+          weather={weatherData}
+          tempUnit={tempUnit}
+          onChangeTempUnit={changeTempUnit}
+        />
+      )}
+      {!isInitial && <ForecastDisplay forecast={forecastData} tempUnit={tempUnit} />}
       <Footer />
     </>
   );

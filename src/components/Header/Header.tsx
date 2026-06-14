@@ -1,9 +1,9 @@
 import React from 'react';
 import GithubIcon from '../../assets/github.svg?react';
-import { useAppContext } from '../../context/AppContext';
+import { useTheme } from '../../context/ThemeContext';
 
 const Header: React.FC = () => {
-  const { darkMode: isDarkMode, toggleDarkMode } = useAppContext();
+  const { darkMode, toggleDarkMode } = useTheme();
 
   return (
     <header className="rw-header">
@@ -13,7 +13,7 @@ const Header: React.FC = () => {
           className="rw-dark-mode-button"
           type="button"
           aria-label="Toggle dark mode"
-          aria-pressed={isDarkMode}
+          aria-pressed={darkMode}
           onClick={toggleDarkMode}
         >
           <span className="rw-dark-mode-thumb" />

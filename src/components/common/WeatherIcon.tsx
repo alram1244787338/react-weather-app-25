@@ -9,12 +9,12 @@ import SnowIcon from '../../assets/weather/snow.svg?react';
 import SunnyIcon from '../../assets/weather/sunny.svg?react';
 import ThunderstormIcon from '../../assets/weather/thunderstorm.svg?react';
 
-interface IWeatherIconProps {
+interface WeatherIconProps {
   code: number;
   big?: boolean;
 }
 
-const WeatherIcon: React.FC<IWeatherIconProps> = (props) => {
+const WeatherIcon: React.FC<WeatherIconProps> = (props) => {
   let Icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 
   switch (props.code) {
