@@ -1,20 +1,14 @@
 import * as React from 'react';
 import { PlaceSuggestion } from '../../api/placeSuggestion';
-import { useAppContext } from '../../context/AppContext';
 
 interface ISuggestionProps {
   suggestion: PlaceSuggestion;
-  hideSuggestionFn: () => void;
+  onSelect: (lat: number, lng: number) => void;
 }
 
 const Suggestion: React.FC<ISuggestionProps> = (props) => {
-  const { fetchWeather } = useAppContext();
-
   const onClick = () => {
-    fetchWeather({ lat: props.suggestion.lat, lng: props.suggestion.lng });
-    setTimeout(() => {
-      props.hideSuggestionFn();
-    }, 400);
+    props.onSelect(props.suggestion.lat, props.suggestion.lng);
   };
 
   return (

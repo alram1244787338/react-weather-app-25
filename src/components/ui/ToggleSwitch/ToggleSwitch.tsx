@@ -1,24 +1,23 @@
 import React from 'react';
 
 interface IToggleSwitchProps {
+  isCelsius: boolean;
   onClick: () => void;
 }
 
 const ToggleSwitch: React.FC<IToggleSwitchProps> = (props) => {
-  const [toggled, setToggled] = React.useState(false);
-
   return (
     <button
       className="rw-temp-switch"
       type="button"
-      onClick={() => {
-        setToggled((checked) => !checked);
-        props.onClick();
-      }}
+      onClick={props.onClick}
     >
-      {toggled && <span className="on">C</span>}
-      {!toggled && <span className="off">F</span>}
-      <span className="rw-temp-slider" style={{ transform: toggled ? ' translateX(28px)' : ' translateX(0px)' }} />
+      {props.isCelsius && <span className="on">C</span>}
+      {!props.isCelsius && <span className="off">F</span>}
+      <span
+        className="rw-temp-slider"
+        style={{ transform: props.isCelsius ? ' translateX(28px)' : ' translateX(0px)' }}
+      />
     </button>
   );
 };

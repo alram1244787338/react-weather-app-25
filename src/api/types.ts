@@ -1,3 +1,7 @@
+export type WeatherQuery = string | { lat: number; lng: number };
+
+// --- Domain types (used throughout the app) ---
+
 export type WeatherData = {
   weather: {
     id: number;
@@ -23,7 +27,7 @@ export type WeatherData = {
     sunset: number;
   };
   name: string;
-}
+};
 
 export type ExtendedForecastData = {
   day: string;
@@ -35,4 +39,48 @@ export type ExtendedForecastData = {
     id: number;
     main: string;
   };
-}
+};
+
+// --- Raw API response types (OpenWeatherMap) ---
+
+export type RawWeatherResponse = {
+  cod: number;
+  message?: string;
+  weather: Array<{
+    id: number;
+    main: string;
+    description: string;
+    icon: string;
+  }>;
+  main: {
+    temp: number;
+    feels_like: number;
+    temp_min: number;
+    temp_max: number;
+    pressure: number;
+    humidity: number;
+  };
+  wind: {
+    speed: number;
+    deg: number;
+  };
+  sys: {
+    country: string;
+    sunrise: number;
+    sunset: number;
+  };
+  name: string;
+};
+
+export type RawForecastResponse = {
+  list: Array<{
+    temp: {
+      max: number;
+      min: number;
+    };
+    weather: Array<{
+      id: number;
+      main: string;
+    }>;
+  }>;
+};

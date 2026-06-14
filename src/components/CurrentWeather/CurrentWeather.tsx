@@ -1,38 +1,28 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import HighIcon from '../../assets/high-icon.svg?react';
 import HumidityIcon from '../../assets/humidity-icon.svg?react';
 import LowIcon from '../../assets/low-icon.svg?react';
 import PressureIcon from '../../assets/pressure-icon.svg?react';
 import WindIcon from '../../assets/wind-icon.svg?react';
-import { useAppContext } from '../../context/AppContext';
+import { usePreferences } from '../../context/PreferencesContext';
+import { useWeather } from '../../context/WeatherContext';
 import { kmToMile, TempUnit } from '../../utils/unitConversion';
 import ToggleSwitch from '../ui/ToggleSwitch/ToggleSwitch';
 import WeatherIcon from './WeatherIcon';
 import Temperature from './Temperature';
 
 const CurrentWeather: React.FC = () => {
-  const {
-    changeTempUnit,
-    isError,
-    isInitial,
-    tempUnit: degreeType,
-    weatherData: weather,
-  } = useAppContext();
+  const { changeTempUnit, tempUnit: degreeType } = usePreferences();
+  const { status, weatherData: weather } = useWeather();
 
-  useEffect(() => {
-    if (isError) {
-      console.log('Cannot load weather for this place');
-    }
-  }, [isError]);
-
-  if (isInitial) return <></>;
+  if (status !== 'success' || !weather) return <></>;
 
   return (
     <div className="rw-weather">
       <div className="rw-weather-header">
         <h6 className="rw-section-title">Current Weather</h6>
         <div>
-          <ToggleSwitch onClick={changeTempUnit} />
+          <ToggleSwitch isCelsius={degreeType === TempUnit.CELSIUS} onClick={changeTempUnit} />
         </div>
       </div>
       <div className="rw-current-weather-inner">
@@ -76,8 +66,8 @@ const CurrentWeather: React.FC = () => {
               <WindIcon /> Wind
             </div>
             <span>
-              {degreeType === TempUnit.CELCIUS ? weather.wind.speed : kmToMile(weather.wind.speed)}
-              {degreeType === TempUnit.CELCIUS ? 'kph' : 'mph'}
+              {degreeType === TempUnit.CELSIUS ? weather.wind.speed : kmToMile(weather.wind.speed)}
+              {degreeType === TempUnit.CELSIUS ? 'kph' : 'mph'}
             </span>
           </div>
           <div className="rw-info-row">

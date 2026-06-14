@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
-import { useAppContext } from './context/AppContext';
+import { usePreferences } from './context/PreferencesContext';
 import Home from './pages/Home';
 
 const App: React.FC = () => {
-  const { darkMode } = useAppContext();
+  const { darkMode } = usePreferences();
 
   useEffect(() => {
     document.body.dataset.theme = darkMode ? 'dark' : 'light';
