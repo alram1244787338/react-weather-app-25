@@ -36,3 +36,5 @@ export type ExtendedForecastData = {
     main: string;
   };
 }
+
+export type WeatherQuery = string | { lat: number; lng: number };

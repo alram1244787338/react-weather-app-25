@@ -1,11 +1,11 @@
 import React from 'react';
-import { useAppContext } from '../../context/AppContext';
+import { useWeather } from '../../context/WeatherContext';
 import ForecastItem from './ForecastItem';
 
 const Forecast: React.FC = () => {
-  const { extendedWeatherData: forecast, isInitial } = useAppContext();
+  const { forecast } = useWeather();
 
-  if (isInitial) return <></>;
+  if (forecast.length === 0) return <></>;
 
   return (
     <div className="rw-forecast">

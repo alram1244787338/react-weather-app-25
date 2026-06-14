@@ -4,35 +4,33 @@ import HumidityIcon from '../../assets/humidity-icon.svg?react';
 import LowIcon from '../../assets/low-icon.svg?react';
 import PressureIcon from '../../assets/pressure-icon.svg?react';
 import WindIcon from '../../assets/wind-icon.svg?react';
-import { useAppContext } from '../../context/AppContext';
-import { kmToMile, TempUnit } from '../../utils/unitConversion';
+import { useWeather } from '../../context/WeatherContext';
+import { usePreferences } from '../../context/PreferencesContext';
+import { formatWind } from '../../utils/unitConversion';
 import ToggleSwitch from '../ui/ToggleSwitch/ToggleSwitch';
 import WeatherIcon from './WeatherIcon';
 import Temperature from './Temperature';
 
 const CurrentWeather: React.FC = () => {
-  const {
-    changeTempUnit,
-    isError,
-    isInitial,
-    tempUnit: degreeType,
-    weatherData: weather,
-  } = useAppContext();
+  const { weather, status } = useWeather();
+  const { tempUnit, toggleTempUnit } = usePreferences();
 
   useEffect(() => {
-    if (isError) {
+    if (status === 'error') {
       console.log('Cannot load weather for this place');
     }
-  }, [isError]);
+  }, [status]);
 
-  if (isInitial) return <></>;
+  if (!weather) return <></>;
+
+  const wind = formatWind(weather.wind.speed, tempUnit);
 
   return (
     <div className="rw-weather">
       <div className="rw-weather-header">
         <h6 className="rw-section-title">Current Weather</h6>
         <div>
-          <ToggleSwitch onClick={changeTempUnit} />
+          <ToggleSwitch onClick={toggleTempUnit} />
         </div>
       </div>
       <div className="rw-current-weather-inner">
@@ -76,8 +74,8 @@ const CurrentWeather: React.FC = () => {
               <WindIcon /> Wind
             </div>
             <span>
-              {degreeType === TempUnit.CELCIUS ? weather.wind.speed : kmToMile(weather.wind.speed)}
-              {degreeType === TempUnit.CELCIUS ? 'kph' : 'mph'}
+              {wind.value}
+              {wind.unit}
             </span>
           </div>
           <div className="rw-info-row">

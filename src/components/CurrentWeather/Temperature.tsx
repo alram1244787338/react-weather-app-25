@@ -1,18 +1,15 @@
 import React from 'react';
-import { useAppContext } from '../../context/AppContext';
-import { celciusToFahrenheit, TempUnit } from '../../utils/unitConversion';
+import { usePreferences } from '../../context/PreferencesContext';
+import { formatTemperature } from '../../utils/unitConversion';
 
 interface ITemperatureProps {
   value: number;
 }
 
 const Temperature: React.FC<ITemperatureProps> = (props) => {
-  const { tempUnit: degreeType } = useAppContext();
+  const { tempUnit } = usePreferences();
 
-  if (degreeType === TempUnit.FAHRENHEIT) {
-    return <>{celciusToFahrenheit(props.value)}</>;
-  }
-  return <>{props.value}</>;
+  return <>{formatTemperature(props.value, tempUnit)}</>;
 };
 
 export default Temperature;
