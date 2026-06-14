@@ -1,28 +1,27 @@
 import React from 'react';
-import { useAppContext } from '../../context/AppContext';
 import ForecastItem from './ForecastItem';
+import { useForecast } from './useForecast';
 
 const Forecast: React.FC = () => {
-  const { extendedWeatherData: forecast, isInitial } = useAppContext();
+  const vm = useForecast();
 
-  if (isInitial) return <></>;
+  if (vm.isInitial) return null;
 
   return (
     <div className="rw-forecast">
       <h6 className="rw-section-title">Extended Forecast</h6>
       <div className="rw-forecast-items">
-        {forecast.map((item, i) => {
-          return (
-            <ForecastItem
-              key={i}
-              day={item.day}
-              high={item.temp.temp_max}
-              low={item.temp.temp_min}
-              weatherCode={item.weather.id}
-              main={item.weather.main}
-            />
-          );
-        })}
+        {vm.days.map((day) => (
+          <ForecastItem
+            key={day.key}
+            day={day.day}
+            iconCode={day.iconCode}
+            condition={day.condition}
+            high={day.high}
+            low={day.low}
+            unit={vm.tempUnit}
+          />
+        ))}
       </div>
     </div>
   );

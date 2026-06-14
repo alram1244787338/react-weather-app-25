@@ -1,97 +1,58 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useAppContext } from '../../context/AppContext';
-import { fetchCities, PlaceSuggestion } from './../../api/placeSuggestion';
-import { useClickOutside } from './../../hooks/useClickOutside';
+import { PlaceSuggestion } from '../../api/placeSuggestion';
 import LocationIcon from '../../assets/location-icon.svg?react';
 import SearchIcon from '../../assets/search-icon.svg?react';
-import Suggestion from './Suggestion';
+import { useAppContext } from '../../context/AppContext';
+import { useClickOutside } from '../../hooks/useClickOutside';
+import SuggestionList from './SuggestionList';
+import { useCitySuggestions } from './useCitySuggestions';
 
 const Search: React.FC = () => {
   const { fetchWeather } = useAppContext();
-  const suggestionRef = useRef<HTMLDivElement>(null);
-  const [suggestions, setSuggestions] = useState<PlaceSuggestion[]>([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
   const [inputValue, setInputValue] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+  const { query, suggestions } = useCitySuggestions(inputValue);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const timeout = window.setTimeout(() => {
-      setSearchTerm(inputValue.trim());
-    }, 300);
+    setIsOpen(Boolean(query));
+  }, [query]);
 
-    return () => {
-      window.clearTimeout(timeout);
-    };
-  }, [inputValue]);
+  useClickOutside(dropdownRef, () => setIsOpen(false));
 
-  useEffect(() => {
-    if (!searchTerm) {
-      setSuggestions([]);
-      setShowSuggestions(false);
-      return;
+  const handleSelect = (suggestion: PlaceSuggestion) => {
+    fetchWeather({ lat: suggestion.lat, lng: suggestion.lng });
+    window.setTimeout(() => {
+      setIsOpen(false);
+    }, 400);
+  };
+
+  const handleLocate = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        fetchWeather({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+      });
+    } else {
+      alert('Geolocation is not supported by this browser.');
     }
-
-    let isActive = true;
-    setShowSuggestions(true);
-
-    fetchCities(searchTerm).then((res) => {
-      if (isActive) {
-        setSuggestions(res);
-      }
-    });
-
-    return () => {
-      isActive = false;
-    };
-  }, [searchTerm]);
-
-  useClickOutside(suggestionRef, () => setShowSuggestions(false));
-
-  const onSearchInputChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
   };
 
-  const showPosition = (position: GeolocationPosition) => {
-    fetchWeather({
-      lat: position.coords.latitude,
-      lng: position.coords.longitude,
-    });
-  };
   return (
     <div className="rw-search">
       <SearchIcon className="rw-search-icon" />
       <input
         className="rw-search-input"
         value={inputValue}
-        onChange={onSearchInputChanged}
+        onChange={(e) => setInputValue(e.target.value)}
         placeholder="Search for location"
       />
-      <button
-        className="rw-location-button"
-        type="button"
-        onClick={() => {
-          if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition);
-          } else {
-            alert('Geolocation is not supported by this browser.');
-          }
-        }}
-      >
+      <button className="rw-location-button" type="button" onClick={handleLocate}>
         <LocationIcon className="rw-location-icon" />
       </button>
-      {showSuggestions && (
-        <div className="rw-search-result" ref={suggestionRef}>
-          {suggestions.map((suggestion) => (
-            <Suggestion
-              key={suggestion.id}
-              suggestion={suggestion}
-              hideSuggestionFn={() => {
-                setShowSuggestions(false);
-              }}
-            />
-          ))}
-        </div>
-      )}
+      {isOpen && <SuggestionList ref={dropdownRef} suggestions={suggestions} onSelect={handleSelect} />}
     </div>
   );
 };
